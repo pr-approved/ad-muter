@@ -26,7 +26,7 @@ youtube-ad-muter/
 1. A `MutationObserver` watches the `.html5-video-player` element for the
    `.ad-showing` class that YouTube adds whenever an ad plays.
 2. The moment that class appears, the `<video>` element is muted instantly.
-3. A 500ms interval starts polling for the Skip button
+3. A 100ms interval starts polling for the Skip button
    (`.ytp-skip-ad-button`, `.ytp-ad-skip-button-modern`) and clicks it
    the moment it becomes available.
 4. When `.ad-showing` disappears, the interval is cleared and your original
