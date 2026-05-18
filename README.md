@@ -69,7 +69,7 @@ youtube-ad-muter/
 
 ## What changed in v1.1
 
-- Added `trySkipAd()` — polls for the skip button every 500ms once an ad starts
+- Added `trySkipAd()` — polls for the skip button every 100ms once an ad starts
 - Supports multiple skip button class names YouTube has used:
   `.ytp-skip-ad-button`, `.ytp-ad-skip-button`, `.ytp-ad-skip-button-modern`
 - Skip poller cleans up automatically when the ad ends
