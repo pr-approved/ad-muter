@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Ad Muter & Skipper",
+  "version": "1.1",
+  "description": "Automatically mutes and skips YouTube ads",
+  "permissions": ["scripting", "tabs"],
+  "host_permissions": ["https://www.youtube.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
