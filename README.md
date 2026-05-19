@@ -1,6 +1,6 @@
 # Ad Muter & Skipper — Chrome Extension
 
-Automatically mutes YouTube ads the instant they start, clicks Skip as soon as
+Automatically mutes YouTube ads the instant they start, "clicks Skip" as soon as
 the button appears, and restores your original volume when the ad ends.
 
 ---
