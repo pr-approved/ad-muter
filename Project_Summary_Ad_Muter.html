@@ -304,7 +304,7 @@
   <div class="header">
     <div class="tag">Project Documentation</div>
     <h1> Ad Muter & Skipper</h1>
-    <p class="subtitle">A Chrome extension built with vanilla JavaScript — how it works and what we learned building it.</p>
+    <p class="subtitle">A Chrome extension built with vanilla JavaScript — how it works and what I learned building it.</p>
   </div>
 
   <!-- How it works -->
@@ -342,7 +342,7 @@
         <div class="flow-left"><div class="flow-dot">4</div><div class="flow-line"></div></div>
         <div class="flow-content">
           <div class="flow-title">Skip poller starts (every 100ms)</div>
-          <div class="flow-desc">A setInterval polls every 100ms to try skipping the ad. The skip button only appears after a few seconds, so we poll until it's available.</div>
+          <div class="flow-desc">A setInterval polls every 100ms to try skipping the ad. The skip button only appears after a few seconds, so the code polls until it's available.</div>
         </div>
       </div>
 
@@ -350,7 +350,7 @@
         <div class="flow-left"><div class="flow-dot">5</div><div class="flow-line"></div></div>
         <div class="flow-content">
           <div class="flow-title">Ad skipped by seeking to end</div>
-          <div class="flow-desc">Instead of clicking the skip button (which YouTube blocks), we seek the video to duration - 1 second. YouTube sees the ad is almost done and transitions out naturally.</div>
+          <div class="flow-desc">Instead of clicking the skip button (which YouTube blocks), the code is seeking the video to duration - 1 second. YouTube sees the ad is almost done and transitions out naturally.</div>
           <div class="flow-code">video.currentTime = video.duration - 1</div>
         </div>
       </div>
@@ -397,7 +397,7 @@ skipBtn.dispatchEvent(new MouseEvent('click',     &#123; bubbles: true &#125;))<
           <span class="lesson-badge">⚠️ Worked but slow</span>
           <span class="lesson-title">Seek to video.duration - 0.1</span>
         </div>
-        <div class="lesson-body">Switched approach entirely — instead of clicking skip, we jump the video playback position to the very last frame. YouTube treats it as "ad finished" and exits. But seeking to the exact last frame caused a 2-3 second buffer stall while the browser fetched the final video chunk.</div>
+        <div class="lesson-body">Switched approach entirely — instead of clicking skip, jump the video playback position to the very last frame. YouTube treats it as "ad finished" and exits. But seeking to the exact last frame caused a 2-3 second buffer stall while the browser fetched the final video chunk.</div>
         <div class="lesson-code">video.currentTime = video.duration - 0.1  // buffer stall at last frame</div>
       </div>
 
