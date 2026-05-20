@@ -1,7 +1,7 @@
-# Ad Muter & Skipper — Chrome Extension
+# YouTube Ad Muter & Skipper — Chrome Extension
 
-Automatically mutes YouTube ads the instant they start, "clicks Skip" as soon as
-the button appears, and restores your original volume when the ad ends.
+Automatically mutes YouTube ads the instant they start, skips them by seeking
+to the end of the ad video, and restores your original volume when the ad ends.
 
 ---
 
@@ -9,30 +9,35 @@ the button appears, and restores your original volume when the ad ends.
 
 ```
 youtube-ad-muter/
-├── manifest.json   ← extension config (Manifest V3)
-├── content.js      ← core logic (injected into youtube.com)
-├── popup.html      ← status popup when you click the toolbar icon
-├── icon16.png      ← (you supply) 16×16 icon  [optional for local use]
-├── icon48.png      ← (you supply) 48×48 icon  [optional for local use]
-└── icon128.png     ← (you supply) 128×128 icon [optional for local use]
+├── manifest.json        ← extension config (Manifest V3)
+├── content.js           ← core logic (injected into youtube.com)
+├── popup.html           ← status popup when you click the toolbar icon
+├── PROJECT_SUMMARY.html ← how it works + lessons learned
+└── README.md            ← this file
 ```
-
-> Icons are optional for local/personal use — Chrome uses a default if missing.
 
 ---
 
 ## How it works
 
-1. A `MutationObserver` watches the `.html5-video-player` element for the
-   `.ad-showing` class that YouTube adds whenever an ad plays.
-2. The moment that class appears, the `<video>` element is muted instantly.
-3. A 100ms interval starts polling for the Skip button
-   (`.ytp-skip-ad-button`, `.ytp-ad-skip-button-modern`) and clicks it
-   the moment it becomes available.
-4. When `.ad-showing` disappears, the interval is cleared and your original
-   mute state is restored.
-5. The observer re-attaches on every YouTube SPA navigation so it works
-   across all videos without a page reload.
+1. Chrome injects `content.js` into every youtube.com tab
+2. A `MutationObserver` watches the video player for the `.ad-showing` class that YouTube adds the moment an ad starts
+3. The `<video>` element is muted instantly
+4. A 100ms interval starts polling to skip the ad
+5. The ad is skipped by seeking `video.currentTime` to `video.duration - 1` — YouTube sees the ad is almost done and transitions out naturally
+6. When `.ad-showing` disappears, the interval clears and your original mute state is restored
+7. The observer re-attaches on every YouTube SPA navigation so it works across all videos
+
+---
+
+## Why seek instead of clicking the skip button?
+
+Two approaches were tried and failed before landing on the seek solution:
+
+- **Plain `.click()`** — YouTube's newer buttons ignore synthetic clicks entirely
+- **Simulated mouse events** (mousedown → mouseup → click) — YouTube blocks these with a "Must be handling a user gesture" browser security policy
+
+Seeking `video.currentTime = video.duration - 1` bypasses all of this — no button click needed, no user gesture required. Landing 1 second before the end keeps playback inside already-buffered territory, so there's no extra network request and no buffer stall.
 
 ---
 
@@ -41,8 +46,8 @@ youtube-ad-muter/
 1. Put all files into a folder, e.g. `youtube-ad-muter/`
 2. Open Chrome → go to `chrome://extensions`
 3. Toggle **Developer mode** ON (top-right switch)
-4. Click **Load unpacked** → select your `youtube-ad-muter/` folder
-5. Open YouTube — it's live immediately and persists across Chrome restarts
+4. Click **Load unpacked** → select your folder
+5. Open YouTube — active immediately, persists across Chrome restarts
 
 ---
 
@@ -50,27 +55,15 @@ youtube-ad-muter/
 
 | Symptom | Fix |
 |---|---|
-| Extension won't load | Check `manifest.json` for syntax errors (paste into jsonlint.com) |
-| Ads not muting | Open DevTools console on YouTube, look for `[Ad Muter]` logs |
-| Skip button not clicking | YouTube may have changed the button class — see below |
+| Extension won't load | Check `manifest.json` for syntax errors |
+| Ads not muting | Open DevTools console (`Cmd+Option+I` on Mac), look for `[Ad Muter]` logs |
+| Ads not skipping | YouTube may have changed `.ad-showing` — right-click the player during an ad → Inspect, check the class name |
 | Mute not restored after ad | Rare race condition — reload the page |
-
-### Checking / updating the skip button class
-
-1. Start playing a video and wait for a skippable ad
-2. Open DevTools (`F12`) → Elements tab
-3. Find the Skip button in the DOM and copy its class name
-4. Update the selector in `content.js` inside `trySkipAd()`:
-   ```js
-   const skipBtn = document.querySelector('.your-new-class-here');
-   ```
 
 ---
 
-## What changed in v1.1
+## GitHub
 
-- Added `trySkipAd()` — polls for the skip button every 100ms once an ad starts
-- Supports multiple skip button class names YouTube has used:
-  `.ytp-skip-ad-button`, `.ytp-ad-skip-button`, `.ytp-ad-skip-button-modern`
-- Skip poller cleans up automatically when the ad ends
-- Updated popup to reflect new features
+[github.com/pr-approved/repo-v1](https://github.com/pr-approved/repo-v1)
+
+Built May 2026
