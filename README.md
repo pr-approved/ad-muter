@@ -3,6 +3,9 @@
 Automatically mutes YT ads the instant they start, skips them by seeking
 to the end of the ad video, and restores your original volume when the ad ends.
 
+Built after a screaming goat ad startled me through headphones around midnight. I have nothing against ads, they keep YouTube free for most people, but that goat pushed me over the edge.
+Vibe-coded in vanilla JavaScript, zero dependencies, no external services. YouTube eventually detected and blocked it, which honestly just confirmed it was working.
+
 ---
 
 ## Files
